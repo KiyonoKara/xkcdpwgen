@@ -1,4 +1,4 @@
-Program to generate secure and memorable passwords using the [XKCD method](https://www.xkcd.com/936/). This repository is one of many different implementations of an XKCD-generated password. 
+Program to generate secure and memorable passwords using the [XKCD method](https://www.xkcd.com/936/). This repository is one of many different implementations for generating XKCD-based passwords. 
 
 ## Usage
 ```shell
