@@ -1,0 +1,48 @@
+#!/usr/bin/env python3
+
+import random
+from argparse import ArgumentParser, RawTextHelpFormatter
+
+parser = ArgumentParser(description='Generate a secure, memorable password using the XKCD method',
+                        formatter_class=RawTextHelpFormatter)
+parser.add_argument('-w', '--words', type=int, default=4,
+                    help='include WORDS words in the password (default=4)')
+parser.add_argument('-c', '--caps', type=int, default=0,
+                    help='capitalize the first letter of CAPS random words\n(default=0)')
+parser.add_argument('-n', '--numbers', type=int, default=0,
+                    help='insert NUMBERS random numbers in the password\n(default=0)')
+parser.add_argument('-s', '--symbols', type=int, default=0,
+                    help='insert SYMBOLS random symbols in the password\n(default=0)')
+args = parser.parse_args()
+
+# Words sourced from https://github.com/dwyl/english-words
+lines = open('words.txt').read().splitlines()
+
+
+def insert_char_random(pwd, char):
+    index = random.randint(0, len(pwd))
+    return pwd[:index] + char + pwd[index:]
+
+
+words = []
+for _ in range(args.words):
+    if args.caps > 0:
+        args.caps -= 1
+        words.append(random.choice(lines).capitalize())
+    else:
+        words.append(random.choice(lines))
+
+password = str()
+for _ in range(args.words):
+    word = random.choice(words)
+    password += word
+    words.remove(word)
+
+for _ in range(args.symbols):
+    symbol = random.choice(["~", "!", "@", "#", "$", "%", "^", "&", "*", ".", ":", ";"])
+    password = insert_char_random(password, symbol)
+
+for _ in range(args.numbers):
+    digit = random.randrange(10).__str__()
+    password = insert_char_random(password, digit)
+print(password, flush=True)
